@@ -1,8 +1,14 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { getCurrrentUser } from "../lib/appwrite";
+import { router } from "expo-router";
 
 const GlobalContext = createContext({});
-export const useGlobalContext = () => useContext(GlobalContext);
+export const useGlobalContext = () => {
+  const result = useContext(GlobalContext);
+  if(!result) throw Error;
+
+  return result;
+};
 
 const GlobalProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -22,8 +28,8 @@ const GlobalProvider = ({ children }) => {
       })
       .catch((error) => {
         console.log(error);
-      })
-      .finally(() => setLoading(false));
+      }).finally(() => setLoading(false))
+
   }, []);
 
   return (
@@ -33,10 +39,12 @@ const GlobalProvider = ({ children }) => {
         setIsLoggedIn,
         user,
         setUser,
-        setLoading,
+        loading
       }}
     >
       {children}
     </GlobalContext.Provider>
   );
 };
+
+export default GlobalProvider

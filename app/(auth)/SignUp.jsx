@@ -6,8 +6,10 @@ import FormField from "../../Components/FormField";
 import CustomButton from "../../Components/CustomButton"
 import { Link, router } from "expo-router";
 import { createAccount } from "../../lib/appwrite.js"
+import { useGlobalContext } from "../../context/GlobalProvider.js";
 
 const SignUp = () => {
+  const { setUser, setIsLoggedIn } = useGlobalContext();
   const [ isSubmitting, setIsSubmitting ] = useState(false)
   const [form, setform] = useState({
     username:'',
@@ -20,15 +22,18 @@ const SignUp = () => {
       Alert.alert("Credentials","Please fill in all details")
     }
 
-    setIsSubmitting((prev) => !prev);
+    setIsSubmitting(true);
 
     try {
       const newUser = await createAccount( form.email, form.password, form.username );
+      setUser(newUser);
+      setIsLoggedIn(true);
+
       router.replace('/home');
     } catch (error) {
       Alert.alert('Error',error.message)
     } finally {
-      setIsSubmitting((prev) => !prev);
+      setIsSubmitting(fasle);
     }
   };
   return (
