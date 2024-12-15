@@ -44,12 +44,7 @@ const TrendingItem = ({ activeItem, item }) => {
   const [play, setPlay] = useState(false);
   const player = useVideoPlayer(videoSource, (player) => {
     player.loop = false;
-    player.play();
   });
-  const { isPlaying } = useEvent(player, "playingChange", {
-    isPlaying: player.playing,
-  });
-  console.log(item.video)
   return (
     <Animatable.View
       className="mr-5"
