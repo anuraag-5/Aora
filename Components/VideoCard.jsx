@@ -21,7 +21,7 @@ const VideoCard = ({
   },
 }) => {
   const [play, setPlay] = useState(false);
-  const videoSource = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+  const videoSource = video;
   const player = useVideoPlayer(videoSource, (player) => {
     player.loop = false;
   });

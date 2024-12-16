@@ -9,7 +9,6 @@ import {
 import { useVideoPlayer, VideoView } from "expo-video";
 import { StyleSheet } from "react-native";
 import { icons } from "../constants";
-import { useEvent } from "expo";
 
 const zoomIn = {
   0: {
@@ -40,7 +39,7 @@ const styles = StyleSheet.create({
 });
 
 const TrendingItem = ({ activeItem, item }) => {
-  const videoSource = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+  const videoSource = item.video;
   const [play, setPlay] = useState(false);
   const player = useVideoPlayer(videoSource, (player) => {
     player.loop = false;
