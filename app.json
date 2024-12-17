@@ -11,7 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "scheme": "sora",
+    "scheme": "aora",
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
