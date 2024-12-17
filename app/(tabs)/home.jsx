@@ -11,7 +11,7 @@ import useAppwrite from "../../lib/useAppwrite"
 import { useGlobalContext } from "../../context/GlobalProvider"
 
 const Home = () => {
-  const { user, setUser, setIsLoggedIn } = useGlobalContext();
+  const { user } = useGlobalContext();
   const { data: posts, reFetch: refresh } = useAppwrite(getAllPosts);
   const { data: latestPosts } = useAppwrite(getLatestPosts);
   const [refreshing, setRefreshing] = useState(false);

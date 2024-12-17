@@ -7,11 +7,16 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  Alert,
 } from "react-native";
 import { CustomButton, FormField } from "../../Components/index";
 import { useState } from "react";
 import { icons } from "../../constants";
 import { useEffect } from "react";
+import * as ImagePicker from 'expo-image-picker';
+import { router } from "expo-router";
+import { createVideo } from "../../lib/appwrite";
+import { useGlobalContext } from "../../context/GlobalProvider"
 
 const styles = StyleSheet.create({
   video: {
@@ -23,12 +28,7 @@ const styles = StyleSheet.create({
 });
 
 const Create = () => {
-  let videoSource =
-    "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
-  const player = useVideoPlayer(videoSource, (player) => {
-    player.loop = false;
-    player.play();
-  });
+  const { user } = useGlobalContext()
   const [uploading, setUploading] = useState(false);
   const [form, setForm] = useState({
     title: "",
@@ -36,12 +36,60 @@ const Create = () => {
     thumbnail: "",
     prompt: "",
   });
+  const [videoSource, setVideoSource] = useState("");
+
+  const player = useVideoPlayer(videoSource, (playerInstance) => {
+    playerInstance.loop = false;
+    playerInstance.play();
+  });
 
   useEffect(() => {
-    videoSource = form.video.uri;
-  }, [form]);
+    if (form.video?.uri) {
+      setVideoSource(form.video.uri); // Start playing when the source is updated
+    }
+  }, [form.video]);
 
-  const submit = () => {};
+  const openPicker = async (selectType) => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: selectType === 'image' ? ['images'] : ['videos'],
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      if (selectType === "image") {
+        setForm({ ...form, thumbnail: result.assets[0] });
+      }
+
+      if (selectType === "video") {
+        setForm({ ...form, video: result.assets[0] });
+      }
+    }
+  };
+  const submit = async () => {
+    if (!form.title || !form.prompt || !form.thumbnail || !form.video) {
+      return Alert.alert("Please fill in all details");
+    }
+    setUploading(true);
+    try {
+      await createVideo({ ...form, userId: user.$id });
+
+      Alert.alert('Success','Video Posted');
+      router.push("/home")
+    } catch (error) {
+      Alert.alert('Error',error.message);
+    } finally {
+      setForm({
+        title: "",
+        video: "",
+        thumbnail: "",
+        prompt: "",
+      });
+      setUploading(false);
+    }
+  };
   return (
     <SafeAreaView className="bg-primary h-full">
       <ScrollView className="px-4 my-6">
@@ -59,7 +107,7 @@ const Create = () => {
           <Text className="text-base text-gray-100 font-pmedium">
             Upload Video
           </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => openPicker("video")}>
             {form.video ? (
               <VideoView
                 style={styles.video}
@@ -84,7 +132,7 @@ const Create = () => {
           <Text className="text-base text-gray-100 font-pmedium">
             Thumbnail Image
           </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => openPicker("image")}>
             {form.thumbnail ? (
               <Image
                 source={{ uri: form.thumbnail.uri }}

@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { getCurrrentUser } from "../lib/appwrite";
-import { router } from "expo-router";
 
 const GlobalContext = createContext({});
 export const useGlobalContext = () => {

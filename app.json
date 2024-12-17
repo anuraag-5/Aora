@@ -48,6 +48,14 @@
     "permissions": [
       "ACCESS_NETWORK_STATE",
       "INTERNET"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "c2a3165b-4c00-47c5-95dd-552afb9f86f3"
+      }
+    }
   }
 }

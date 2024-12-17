@@ -2,8 +2,8 @@ import { View, FlatList, TouchableOpacity, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import useAppwrite from "../../lib/useAppwrite";
-import { getUserPosts, searchPosts, signOut } from "../../lib/appwrite";
-import { EmptyState, SearchInput, VideoCard } from "../../Components";
+import { getUserPosts, signOut } from "../../lib/appwrite";
+import { EmptyState, VideoCard } from "../../Components";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { icons } from "../../constants";
 import InfoBox from "../../Components/InfoBox";
