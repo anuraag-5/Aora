@@ -56,8 +56,6 @@ const Create = () => {
       quality: 1,
     });
 
-    console.log(result);
-
     if (!result.canceled) {
       if (selectType === "image") {
         setForm({ ...form, thumbnail: result.assets[0] });
